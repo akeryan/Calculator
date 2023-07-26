@@ -1,14 +1,23 @@
 .calc-body {
     background-color: yellow;
     width: 300px;
-    height: 250px;
+    height: 300px;
     margin-left: auto;
     margin-right: auto;
 }
 
 .display {
-    background-color: lightcoral;
     height: 50px;
+}
+
+.display.status {
+    background-color: aquamarine;
+    font-size: 16px;
+}
+
+.display.main {
+    background-color: bisque;
+    font-size: 24px;
 }
 
 .btn {
