@@ -1,0 +1,17 @@
+.calc-body {
+    background-color: yellow;
+    width: 300px;
+    height: 250px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.display {
+    background-color: lightcoral;
+    height: 50px;
+}
+
+.btn {
+    width: 50px;
+    height: 40px;
+}
