@@ -1,7 +1,10 @@
 let number1 = ''
 let number2 = ''
 let operator = ''
+
 const digitButtons = document.querySelectorAll('.btn')
+const displayStatusEl = document.getElementById('display-status')
+const displayMainEl = document.getElementById('display-main')
 
 digitButtons.forEach( button => {
     button.addEventListener( 'click', event => {
@@ -10,17 +13,27 @@ digitButtons.forEach( button => {
 });
 
 function fillExpression( input ) {
-    if( '+-*/'.includes( input ) ) {
+    if( input === 'C' ) {
+        number1 = ''
+        number2 = ''
+        operator = ''
+        displayStatusEl.textContent = '0'
+    } else if( '+-*/'.includes( input ) ) {
         operator = input
-        console.log(`operator: ${operator}`)
+        displayStatusEl.textContent += input
     } else if( input === '=' ) {
-        console.log(`result = ${operate( +number1, +number2, operator )}`)
+        let result = operate( +number1, +number2, operator )
+        displayStatusEl.textContent = result
     } else if( operator === '') {
-        number1 += input
-        console.log(`number1: ${number1}`)
+        if( displayStatusEl.textContent === '0') {
+            displayStatusEl.textContent = input
+        } else {
+            displayStatusEl.textContent += input
+        }
+        number1 += input;
     } else if( operator !== '') {
         number2 += input
-        console.log(`number2: ${number2}`)
+        displayStatusEl.textContent += input
     }
 }
 
