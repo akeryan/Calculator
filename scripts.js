@@ -13,25 +13,44 @@ digitButtons.forEach( button => {
 });
 
 function fillExpression( input ) {
-    if( input === 'C' ) {
+    if( input === '⇦' ) {
+        if( operator === '' ) {
+            number1 = number1.slice( 0, -1 )
+        } else {
+            if( number2 === '' ) {
+                operator = ''
+            } else {
+                number2 = number2.slice( 0, -1 )
+            }
+        }
+
+        if( number1 === '' ) {
+            displayStatusEl.textContent = '0'
+        } else {
+            displayStatusEl.textContent = displayStatusEl.textContent.slice( 0, -1 )
+        }
+    } else if( input === 'C' ) {
         number1 = ''
         number2 = ''
         operator = ''
         displayStatusEl.textContent = '0'
     } else if( '+-*/'.includes( input ) ) {
-        operator = input
-        displayStatusEl.textContent += input
+        if( number1 !== ''){
+            operator = input
+            displayStatusEl.textContent += input
+        }
     } else if( input === '=' ) {
-        let result = operate( +number1, +number2, operator )
-        displayStatusEl.textContent = result
+        if ( number2 !== '' ) {
+            displayStatusEl.textContent = operate( +number1, +number2, operator )
+        }
     } else if( operator === '') {
+        number1 += input
         if( displayStatusEl.textContent === '0') {
             displayStatusEl.textContent = input
         } else {
             displayStatusEl.textContent += input
         }
-        number1 += input;
-    } else if( operator !== '') {
+    } else {
         number2 += input
         displayStatusEl.textContent += input
     }
