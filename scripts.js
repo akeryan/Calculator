@@ -1,10 +1,10 @@
-let number1 = ''
-let number2 = ''
-let operator = ''
+let expression = []
 
 const digitButtons = document.querySelectorAll('.btn')
 const displayStatusEl = document.getElementById('display-status')
 const displayMainEl = document.getElementById('display-main')
+
+displayStatusEl.textContent = '0'
 
 digitButtons.forEach( button => {
     button.addEventListener( 'click', event => {
@@ -13,46 +13,46 @@ digitButtons.forEach( button => {
 });
 
 function fillExpression( input ) {
-    if( input === '⇦' ) {
-        if( operator === '' ) {
-            number1 = number1.slice( 0, -1 )
-        } else {
-            if( number2 === '' ) {
-                operator = ''
-            } else {
-                number2 = number2.slice( 0, -1 )
-            }
-        }
-
-        if( number1 === '' ) {
-            displayStatusEl.textContent = '0'
-        } else {
-            displayStatusEl.textContent = displayStatusEl.textContent.slice( 0, -1 )
-        }
-    } else if( input === 'C' ) {
-        number1 = ''
-        number2 = ''
-        operator = ''
+    if( input === 'C' ) { //done
+        expression = []
         displayStatusEl.textContent = '0'
-    } else if( '+-*/'.includes( input ) ) {
-        if( number1 !== ''){
-            operator = input
-            displayStatusEl.textContent += input
-        }
-    } else if( input === '=' ) {
-        if ( number2 !== '' ) {
-            displayStatusEl.textContent = operate( +number1, +number2, operator )
-        }
-    } else if( operator === '') {
-        number1 += input
-        if( displayStatusEl.textContent === '0') {
-            displayStatusEl.textContent = input
+    } else if( '+-*/'.includes( input ) ) { //done
+        if( expression.length % 2 === 0 ){
+            expression[ expression.length - 1 ] = input
         } else {
-            displayStatusEl.textContent += input
+            expression.push(input)
         }
+        render()        
+    } else if( input === '=' ) { //done
+        if ( expression.length % 2 !== 0 ) {
+            expression[0] = calcExpression()
+            expression.splice(1)
+            render()
+        }
+    } else { //done
+        if( expression.length % 2 === 0) {
+            expression.push(input)
+        } else {
+            expression[expression.length-1] += input
+        }
+        render()
+    }
+    
+}
+
+function calcExpression() {
+    let result = expression[0]
+    for( let i = 2; i < expression.length; i += 2 ) {
+        result = operate( +result, +expression[i], expression[i-1])
+    }
+    return result
+}
+
+function render() {
+    if( expression.length === 0 ) {
+        displayStatusEl.textContent = '0'
     } else {
-        number2 += input
-        displayStatusEl.textContent += input
+        displayStatusEl.textContent = expression.join('')
     }
 }
 
