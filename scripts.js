@@ -19,14 +19,23 @@ function fillExpression( input ) {
         result = 0
         displayLiveEl.textContent = '0'
         displayResultEl.textContent = ''
+    } else if( input === '+/-' ) {
+        if( expression.length === 0 ) {
+            expression.push( input )
+            render()
+        } else if( expression.length % 2 !== 0 ) {
+            let number = +expression[ expression.length - 1 ]  
+            expression[ expression.length - 1 ] = (number * (-1)).toString()
+            render() 
+        }
     } else if( '+-*/'.includes( input ) ) {
         isResult = false
         if( input === '-' && expression.length === 0 ) {
-            expression.push(input)
+            expression.push( input )
         } else if ( expression.length % 2 === 0 && input !== '-' ) {
             expression[ expression.length - 1 ] = input
         } else {
-            expression.push(input)
+            expression.push( input )
         }
         render()        
     } else if( input === '=' ) {
