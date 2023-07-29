@@ -1,5 +1,5 @@
 let expression = [] //stores the chain of entered numbers and operations
-let isNew = false //tracks whether the '=' was hit and now we are dealnig with new expression
+let isResult = false //tracks whether the '=' was hit and now we are dealnig with new expression
 
 const digitButtons = document.querySelectorAll('.btn')
 const displayLiveEl = document.getElementById('display-live')
@@ -20,8 +20,10 @@ function fillExpression( input ) {
         displayLiveEl.textContent = '0'
         displayResultEl.textContent = ''
     } else if( '+-*/'.includes( input ) ) {
-        isNew = false
-        if( expression.length % 2 === 0 ){
+        isResult = false
+        if( input === '-' && expression.length === 0 ) {
+            expression.push(input)
+        } else if ( expression.length % 2 === 0 && input !== '-' ) {
             expression[ expression.length - 1 ] = input
         } else {
             expression.push(input)
@@ -32,15 +34,15 @@ function fillExpression( input ) {
             expression[0] = calcExpression()
             expression.splice(1)
             displayResultEl.textContent = ''
-            isNew = true
+            isResult = true
             render()
         }
     } else {
         if( expression.length % 2 === 0) {
             expression.push(input)
-        } else if( isNew === true ) {
+        } else if( isResult === true ) {
             expression[0] = input
-            isNew = false
+            isResult = false
         } else {
             expression[expression.length-1] += input
         }
@@ -63,8 +65,14 @@ function render() {
     } else {
         displayLiveEl.textContent = expression.join('')
     }
+
     if( expression.length >= 3 ) {
-        displayResultEl.textContent = calcExpression()
+        let result = calcExpression()
+        if( isNaN(result) ) {
+            displayResultEl.textContent = ''
+        } else {
+            displayResultEl.textContent = result
+        }
     }
 }
 

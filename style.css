@@ -8,14 +8,14 @@
 
 .display.live {
     background-color: aquamarine;
-    font-size: 50px;
+    font-size: 60px;
     text-align: right;
     padding-right: 10px;
     height: 70px;
 }
 
 .display.result {
-    background-color: bisque;
+    background-color: aquamarine;
     font-size: 24px;
     height: 30px;
     text-align: right;
