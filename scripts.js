@@ -28,6 +28,16 @@ function fillExpression( input ) {
             expression[ expression.length - 1 ] = (number * (-1)).toString()
             render() 
         }
+    } else if( input === '.' ) {
+        if( expression.length % 2 === 0 ) {
+            expression.push( input )            
+            render()
+        } else {
+            if( !expression[ expression.length - 1 ].includes('.') ) {
+                expression[ expression.length - 1 ] += '.'
+                render()
+            }
+        }
     } else if( '+-*/'.includes( input ) ) {
         isResult = false
         if( input === '-' && expression.length === 0 ) {
