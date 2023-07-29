@@ -6,7 +6,7 @@
     margin-right: auto;
 }
 
-.display.status {
+.display.live {
     background-color: aquamarine;
     font-size: 50px;
     text-align: right;
@@ -14,10 +14,12 @@
     height: 70px;
 }
 
-.display.main {
+.display.result {
     background-color: bisque;
     font-size: 24px;
     height: 30px;
+    text-align: right;
+    padding-right: 10px;
 }
 
 .btn {

@@ -1,10 +1,10 @@
 let expression = []
 
 const digitButtons = document.querySelectorAll('.btn')
-const displayStatusEl = document.getElementById('display-status')
-const displayMainEl = document.getElementById('display-main')
+const displayLiveEl = document.getElementById('display-live')
+const displayResultEl = document.getElementById('display-result')
 
-displayStatusEl.textContent = '0'
+displayLiveEl.textContent = '0'
 
 digitButtons.forEach( button => {
     button.addEventListener( 'click', event => {
@@ -13,23 +13,24 @@ digitButtons.forEach( button => {
 });
 
 function fillExpression( input ) {
-    if( input === 'C' ) { //done
+    if( input === 'C' ) {
         expression = []
-        displayStatusEl.textContent = '0'
-    } else if( '+-*/'.includes( input ) ) { //done
+        displayLiveEl.textContent = '0'
+    } else if( '+-*/'.includes( input ) ) {
+        lastOperation = input
         if( expression.length % 2 === 0 ){
             expression[ expression.length - 1 ] = input
         } else {
             expression.push(input)
         }
         render()        
-    } else if( input === '=' ) { //done
+    } else if( input === '=' ) {
         if ( expression.length % 2 !== 0 ) {
             expression[0] = calcExpression()
             expression.splice(1)
             render()
         }
-    } else { //done
+    } else {
         if( expression.length % 2 === 0) {
             expression.push(input)
         } else {
@@ -50,9 +51,12 @@ function calcExpression() {
 
 function render() {
     if( expression.length === 0 ) {
-        displayStatusEl.textContent = '0'
+        displayLiveEl.textContent = '0'
     } else {
-        displayStatusEl.textContent = expression.join('')
+        displayLiveEl.textContent = expression.join('')
+    }
+    if( expression.length >= 3 ) {
+        displayResultEl.textContent = calcExpression()
     }
 }
 
