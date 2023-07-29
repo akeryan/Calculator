@@ -19,6 +19,14 @@ function fillExpression( input ) {
         result = 0
         displayLiveEl.textContent = '0'
         displayResultEl.textContent = ''
+    } else if ( input === '⇦') {
+        if( expression.length > 0 ) {
+            let last = expression.pop()
+            if( last.length > 1 ) {
+                expression.push(last.slice(0, -1))
+            }        
+            render()
+        }
     } else if( input === '+/-' ) {
         if( expression.length === 0 ) {
             expression.push( input )
@@ -50,7 +58,7 @@ function fillExpression( input ) {
         render()        
     } else if( input === '=' ) {
         if ( expression.length > 1 && expression.length % 2 !== 0 ) {
-            expression[0] = calcExpression()
+            expression[0] = calcExpression().toString()
             expression.splice(1)
             displayResultEl.textContent = ''
             isResult = true
@@ -75,7 +83,7 @@ function calcExpression() {
     for( let i = 2; i < expression.length; i += 2 ) {
         result = operate( +result, +expression[i], expression[i-1])
     }
-    return result
+    return Number(Math.round(result + 'e6') + "e-6")
 }
 
 function render() {
@@ -85,13 +93,15 @@ function render() {
         displayLiveEl.textContent = expression.join('')
     }
 
-    if( expression.length >= 3 ) {
+    if( expression.length >= 1 ) {
         let result = calcExpression()
         if( isNaN(result) ) {
             displayResultEl.textContent = ''
         } else {
             displayResultEl.textContent = result
         }
+    } else {
+        displayResultEl.textContent = ''
     }
 }
 
