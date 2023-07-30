@@ -1,7 +1,18 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: 'Roboto Condensed', sans-serif;
+}
+
 .calc-body {
     background-color: yellow;
-    width: 300px;
-    height: 300px;
+    border: 1px solid rgb(81, 187, 230);
+    width: 227px;
+    height: 335px;
+    margin-top: 80px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -10,7 +21,7 @@
     background-color: aquamarine;
     font-size: 60px;
     text-align: right;
-    padding-right: 10px;
+    padding-right: 3px;
     height: 70px;
 }
 
@@ -23,6 +34,15 @@
 }
 
 .btn {
+    font-family: 'Orbitron', sans-serif;
     width: 50px;
     height: 40px;
+    font-size: 20px;
+    margin: 2px 1px 3px 1px;
+    border: 1px solid rgb(81, 187, 230);
+    border-radius: 5px;
+}
+
+.btns-container {
+    padding: 4px;
 }
