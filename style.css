@@ -10,6 +10,7 @@ body {
 .calc-body {
     background-color: yellow;
     border: 1px solid rgb(81, 187, 230);
+    border-radius: 5px;
     width: 227px;
     height: 335px;
     margin-top: 80px;
@@ -19,6 +20,8 @@ body {
 
 .display.live {
     background-color: aquamarine;
+    border-top-left-radius : 5px;
+    border-top-right-radius : 5px;
     font-size: 60px;
     text-align: right;
     padding-right: 3px;
@@ -45,4 +48,5 @@ body {
 
 .btns-container {
     padding: 4px;
+    border-top: 1px solid rgb(81, 187, 230);
 }

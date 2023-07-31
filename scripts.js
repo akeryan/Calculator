@@ -13,11 +13,14 @@ digitButtons.forEach( button => {
     });
 });
 
+document.onkeydown = event => {
+    fillExpression( event.key )
+};
+
 function fillExpression( input ) {
     if( input === 'C' ) {
         expression = []
-        result = 0
-    } else if ( input === '⇦') {
+    } else if ( input === '⇦' || input === 'Backspace' ) {
         if( expression.length > 0 ) {
             let last = expression.pop()
             if( last.length > 1 ) {
@@ -25,9 +28,7 @@ function fillExpression( input ) {
             }        
         }
     } else if( input === '+/-' ) {
-        if( expression.length === 0 ) {
-            expression.push( input )
-        } else if( expression.length % 2 !== 0 ) {
+        if( expression.length % 2 !== 0 ) {
             let number = +expression[ expression.length - 1 ]  
             expression[ expression.length - 1 ] = (number * (-1)).toString()
         }
@@ -41,27 +42,30 @@ function fillExpression( input ) {
         }
     } else if( '+-*/'.includes( input ) ) {
         isResult = false
-        if( input === '-' && expression.length === 0 ) {
+        if( expression.length === 0 && input === '-' ) {
             expression.push( input )
-        } else if ( expression.length % 2 === 0 && input !== '-' ) {
+        } else if ( expression.length % 2 === 0 && input !== '-') {
+            expression[ expression.length - 1 ] = input
+        } else if( expression[ expression.length - 1 ] === '+' && input === '-' ) {
             expression[ expression.length - 1 ] = input
         } else {
             expression.push( input )
-        }       
-    } else if( input === '=' ) {
+        }      
+    } else if( input === '=' || input === 'Enter' ) {
         if ( expression.length > 1 && expression.length % 2 !== 0 ) {
             expression[0] = calcExpression().toString()
             expression.splice(1)
             isResult = true
         }
-    } else {
-        if( expression.length % 2 === 0) {
+    } else if( '0123456789'.includes( input ) )
+    {
+        if( expression.length % 2 === 0 ) {
             expression.push(input)
         } else if( isResult === true ) {
             expression[0] = input
             isResult = false
         } else {
-            expression[expression.length-1] += input
+            expression[ expression.length-1 ] += input
         }
     }
     render()    
