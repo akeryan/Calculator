@@ -18,57 +18,84 @@ document.onkeydown = event => {
 };
 
 function fillExpression( input ) {
-    if( input === 'C' ) {
-        expression = []
-    } else if ( input === '⇦' || input === 'Backspace' ) {
-        if( expression.length > 0 ) {
-            let last = expression.pop()
-            if( last.length > 1 ) {
-                expression.push(last.slice(0, -1))
-            }        
-        }
-    } else if( input === '+/-' ) {
-        if( expression.length % 2 !== 0 ) {
-            let number = +expression[ expression.length - 1 ]  
-            expression[ expression.length - 1 ] = (number * (-1)).toString()
-        }
-    } else if( input === '.' ) {
-        if( expression.length % 2 === 0 ) {
-            expression.push( input )            
-        } else {
-            if( !expression[ expression.length - 1 ].includes('.') ) {
-                expression[ expression.length - 1 ] += '.'
-            }
-        }
-    } else if( '+-*/'.includes( input ) ) {
+    switch( input ) {
+        case 'C': expression = []
+        break;
+        case '⇦': case 'Backspace': inputBackspace( input )
+        break;
+        case '+/-': inputSign( input )
+        break;
+        case '.': inputDot( input )
+        break;
+        case '+': case '-': case '*': case '/': inputOperation( input )
+        break;
+        case '=': case 'Enter': inputEnter( input )
+        break;
+        case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9': {
+            inputDigit(input)
+            break;
+        }        
+    }
+    console.log(expression)
+    render()
+}
+
+function inputDigit( input ) { // 0,1,2,3,4,5,6,7,8,9
+    if( expression.length % 2 === 0 ) {
+        expression.push(input)
+    } else if( isResult === true ) {
+        expression[0] = input
         isResult = false
-        if( expression.length === 0 && input === '-' ) {
-            expression.push( input )
-        } else if ( expression.length % 2 === 0 && input !== '-') {
-            expression[ expression.length - 1 ] = input
-        } else if( expression[ expression.length - 1 ] === '+' && input === '-' ) {
-            expression[ expression.length - 1 ] = input
-        } else {
-            expression.push( input )
-        }      
-    } else if( input === '=' || input === 'Enter' ) {
-        if ( expression.length > 1 && expression.length % 2 !== 0 ) {
-            expression[0] = calcExpression().toString()
-            expression.splice(1)
-            isResult = true
-        }
-    } else if( '0123456789'.includes( input ) )
-    {
-        if( expression.length % 2 === 0 ) {
-            expression.push(input)
-        } else if( isResult === true ) {
-            expression[0] = input
-            isResult = false
-        } else {
-            expression[ expression.length-1 ] += input
+    } else {
+        expression[ expression.length-1 ] += input
+    }
+}
+
+function inputBackspace( input ) {
+    if( expression.length > 0 ) {
+        let last = expression.pop()
+        if( last.length > 1 ) {
+            expression.push(last.slice(0, -1))
+        }        
+    }
+}
+
+function inputSign( input ) { //   +/-
+    if( expression.length % 2 !== 0 ) {
+        let number = +expression[ expression.length - 1 ]  
+        expression[ expression.length - 1 ] = (number * (-1)).toString()
+    }
+}
+
+function inputDot( input ) {
+    if( expression.length % 2 === 0 ) {
+        expression.push( input )            
+    } else {
+        if( !expression[ expression.length - 1 ].includes('.') ) {
+            expression[ expression.length - 1 ] += '.'
         }
     }
-    render()    
+}
+
+function inputOperation( input ) {
+    isResult = false
+    if( expression.length === 0 && input === '-' ) {
+        expression.push( input )
+    } else if( expression.length > 0 && expression.length % 2 === 0 && input !== '-'
+                || expression[ expression.length - 1 ] === '+' && input === '-' ) {
+        expression[ expression.length - 1 ] = input 
+    } 
+    else {
+        expression.push( input )
+    } 
+}
+
+function inputEnter( input ) {
+    if( expression.length > 1 && expression.length % 2 !== 0 ) {
+        expression[0] = calcExpression().toString()
+        expression.splice(1)
+        isResult = true
+    }
 }
 
 function calcExpression() {
