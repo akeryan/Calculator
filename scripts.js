@@ -24,7 +24,7 @@ const exprLen = () => expression.length
 
 function fillExpression( input ) {
     switch( true ) {
-        case input === 'C': expression = []
+        case input === 'AC': expression = []
         break;
         case ['⇦', 'Backspace'].includes( input ): inputBackspace( input )
         break;
@@ -85,13 +85,10 @@ function inputDot( input ) {
 
 function inputOperation( input ) { //+,-,*,/
     isResult = false
-    if( exprLen() === 0 && input === '-' ) {
-        expression.push( input )
-    } else if( exprLen() > 0 && exprLen() % 2 === 0 && input !== '-'
-               || expression[ exprLen() - 1 ] === '+' && input === '-' ) {
+    if( exprLen() > 0 && exprLen() % 2 === 0 ) {
         expression[ exprLen() - 1 ] = input 
     } 
-    else {
+    else if( exprLen() > 0 ) {
         expression.push( input )
     } 
 }
