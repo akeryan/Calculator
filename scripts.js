@@ -8,7 +8,8 @@ const displayResultEl = document.getElementById('display-result')
 displayLiveEl.textContent = '0'
 
 digitButtons.forEach( button => {
-    button.addEventListener( 'click', event => fillExpression( event.target.textContent ))
+    button.addEventListener( 'click', event => 
+        fillExpression( event.target.textContent ))
 });
 
 document.onkeydown = event => {
@@ -48,7 +49,11 @@ function inputDigit( input ) { // 0,1,2,3,4,5,6,7,8,9
         expression[0] = input
         isResult = false
     } else {
-        expression[ exprLen()-1 ] += input
+        let temp = expression[ exprLen()-1 ] + input
+        console.log('temp: ' + temp)
+        if( +'-99999999999999' <= temp && temp <= +'99999999999999' ) {
+            expression[ exprLen()-1 ] = temp
+        }
     }
 }
 
