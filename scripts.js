@@ -1,3 +1,6 @@
+const maxValue = 99999999999999
+const minValue = -99999999999999
+
 let expression = [] //stores the chain of entered numbers and operations
 let isResult = false //tracks whether the '=' was hit and now we are dealnig with new expression
 
@@ -20,7 +23,6 @@ document.onkeydown = event => {
 const exprLen = () => expression.length
 
 function fillExpression( input ) {
-    console.log('key: ' + input)
     switch( true ) {
         case input === 'C': expression = []
         break;
@@ -38,7 +40,6 @@ function fillExpression( input ) {
         break;      
         default: break;  
     }
-    console.log(expression)
     render()
 }
 
@@ -50,8 +51,7 @@ function inputDigit( input ) { // 0,1,2,3,4,5,6,7,8,9
         isResult = false
     } else {
         let temp = expression[ exprLen()-1 ] + input
-        console.log('temp: ' + temp)
-        if( +'-99999999999999' <= temp && temp <= +'99999999999999' ) {
+        if( minValue <= temp && temp <= maxValue ) {
             expression[ exprLen()-1 ] = temp
         }
     }
