@@ -12,9 +12,7 @@ digitButtons.forEach( button => {
 });
 
 document.onkeydown = event => {
-    if( event.key === 'Enter') {
-        event.preventDefault()
-    }
+    event.preventDefault()
     fillExpression( event.key )
 }
 
