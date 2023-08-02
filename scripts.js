@@ -24,7 +24,7 @@ const exprLen = () => expression.length
 
 function fillExpression( input ) {
     switch( true ) {
-        case input === 'AC': expression = []
+        case ['AC', 'Escape'].includes( input ): expression = []
         break;
         case ['⇦', 'Backspace'].includes( input ): inputBackspace( input )
         break;
