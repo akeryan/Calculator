@@ -117,7 +117,7 @@ function render() {
         displayLiveEl.textContent = '0'
         displayResultEl.textContent = ''
     } else {
-        displayLiveEl.textContent = addCommasToExpr( expression )
+        displayLiveEl.textContent = addCommasToExpr()
     }
 
     if( exprLen() >= 3 ) {
@@ -125,53 +125,20 @@ function render() {
         if( isNaN(result) ) {
             displayResultEl.textContent = 'NaN'
         } else {
-            displayResultEl.textContent = addCommas( result.toString() )
+            displayResultEl.textContent = result.toLocaleString()
         }
     } else {
         displayResultEl.textContent = ''
     }
 }
 
-//inserts commas to all the numbers of an expression
-function addCommasToExpr( expr ) {
-    let tempExpr = expr.map((x) => x)
+//Formats numbers of the expression with commas
+function addCommasToExpr() {
+    let tempExpr = expression.map((x) => x)
     for( let i = 0; i < tempExpr.length; i += 2 ) {
-        tempExpr[i] = addCommas( tempExpr[i] )
+        tempExpr[i] = (+tempExpr[i]).toLocaleString()
     }
     return tempExpr.join('')
-}
-
-//addCommas adds commas to a single number expressed as a string
-function addCommas( numStr ) {
-    let numArr = numStr.split('.')
-    let numLen = numArr[0].length
-    if( numArr[0][0] === '-' ) {
-        numLen--
-    }
-    if( numLen > 3 ) {
-        let j = 1
-        let k = 0
-        while( j*3 < numLen ) {
-            numArr[0] = insertStringAt( numArr[0], (-1)*(j*3+k), ',' ) 
-            j++       
-            k++
-        }
-    }
-    if( numArr.length === 2 ) {
-        return numArr[0] + '.' + numArr[1]
-    }
-    return numArr[0]
-}
-
-//inserts a string(implant) at an index in str
-function insertStringAt( str, index, implant ) {
-    if( index < 0 ) {
-        index = str.length + index
-        if( index < 0 ) {
-            index = 0
-        }
-    }
-    return str.slice( 0, index ) + implant + str.slice( index )
 }
 
 function calcDisplayLiveFontSize( str ) {
