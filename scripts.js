@@ -125,7 +125,11 @@ function render() {
         if( isNaN(result) ) {
             displayResultEl.textContent = 'NaN'
         } else {
-            displayResultEl.textContent = result.toLocaleString()
+            if( result.toFixed().length > 10) {
+                displayResultEl.textContent = result.toExponential(2)
+            } else {
+                displayResultEl.textContent = result.toLocaleString()
+            }
         }
     } else {
         displayResultEl.textContent = ''
