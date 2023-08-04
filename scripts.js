@@ -117,23 +117,16 @@ function calcExpression() {
     } else {
         result = expr[0]
     }
+
     for( let i = 2; i < expr.length; i += 2 ) {
         if( expr[ i ].includes( '%' ) ) {
-            result = operate( +result, +expr[i], '%', expr[i-1] )                        
+            result = operate( +result, +(expr[i].slice(0, -1)), '%', expr[i-1] )                        
         } else {
             result = operate( +result, +expr[i], expr[i-1] )
         }
     }
     return Number(Math.round(result + 'e7') + "e-7")
 }
-
-// function calcExpression() {
-//     let result = expr[0]
-//     for( let i = 2; i < expr.length; i += 2 ) {
-//         result = operate( +result, +expr[i], expr[i-1])
-//     }
-//     return Number(Math.round(result + 'e7') + "e-7")
-// }
 
 function render() {
     let exprStr = expr.join('')
@@ -146,7 +139,7 @@ function render() {
         displayLiveEl.textContent = addCommasToExpr()
     }
 
-    if( expr.length >= 3 ) {
+    if( expr.length >= 1 ) {
         let result = calcExpression()
         if( isNaN(result) ) {
             displayResultEl.textContent = 'NaN'
