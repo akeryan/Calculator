@@ -110,7 +110,7 @@ function inputEnter( input ) {
     }
 }
 
-function calcExpression( expr ) {
+function calcExpression() {
     let result = 0;
     if( expr[ 0 ].includes( '%' ) ) {
         result = +(expr[ 0 ].slice(0, -1)) / 100        
@@ -119,7 +119,7 @@ function calcExpression( expr ) {
     }
     for( let i = 2; i < expr.length; i += 2 ) {
         if( expr[ i ].includes( '%' ) ) {
-            result = operate( +result, +expr[i], expr[i-1], '%' )                        
+            result = operate( +result, +expr[i], '%', expr[i-1] )                        
         } else {
             result = operate( +result, +expr[i], expr[i-1] )
         }
@@ -166,7 +166,11 @@ function render() {
 function addCommasToExpr() {
     let tempExpr = expr.map((x) => x)
     for( let i = 0; i < tempExpr.length; i += 2 ) {
-        tempExpr[i] = (+tempExpr[i]).toLocaleString()
+        if( tempExpr[i].includes('%') ) {
+            tempExpr[i] = (+tempExpr[i].slice( 0, -1 )).toLocaleString() + '%'        
+        } else {
+            tempExpr[i] = (+tempExpr[i]).toLocaleString()
+        }
     }
     return tempExpr.join('')
 }
@@ -202,13 +206,24 @@ function divide( a, b ) {
     return a / b;
 }
 
-
-function operate( num1, num2, op ) {
+function percentage( n1, n2, op ) {
     switch( op ) {
+        case '+': return n1 + ( n1 * n2 / 100 )
+        case '-': return n1 - ( n1 * n2 / 100 )
+        case '*': return n1 * n2 / 100
+        case '/': return n1 / ( n2 / 100 )
+        default: break 
+    }
+}
+
+
+function operate( num1, num2, operation, op ) {
+    switch( operation ) {
         case '+': return add( num1, num2 )
         case '-': return subtract( num1, num2 )
         case '*': return multiply( num1, num2 )
         case '/': return divide( num1, num2 )
+        case '%': return percentage( num1, num2, op)
     }
 }
 
