@@ -1,8 +1,8 @@
 const maxValue = 99999999999999
 const minValue = -99999999999999
 
-let expression = [] //stores the chain of entered numbers and operations
-let isResult = false //tracks whether the '=' was hit and now we are dealnig with new expression
+let expr = [] //stores the chain of entered numbers and operations
+let isResult = false //tracks whether the '=' was hit and now we are dealnig with new expr
 
 const digitButtons = document.querySelectorAll('.btn')
 const displayLiveEl = document.getElementById('display-live')
@@ -20,11 +20,9 @@ document.onkeydown = event => {
     fillExpression( event.key )
 }
 
-const exprLen = () => expression.length
-
 function fillExpression( input ) {
     switch( true ) {
-        case ['AC', 'Escape'].includes( input ): expression = []
+        case ['AC', 'Escape'].includes( input ): expr = []
         break;
         case ['⇦', 'Backspace'].includes( input ): inputBackspace( input )
         break;
@@ -37,80 +35,108 @@ function fillExpression( input ) {
         case ['=', 'Enter'].includes( input ): inputEnter( input )
         break;
         case '0123456789'.includes( input ): inputDigit(input)            
-        break;      
+        break;     
+        case input === '%': inputPercentage( input ) 
+        break;
         default: break;  
     }
     render()
 }
 
+function inputPercentage( input ) {    
+    if( expr.length % 2 !== 0 ) {
+        if( expr[ expr.length - 1 ].length > 0 && !expr[ expr.length - 1].includes('%') ) {
+            expr[ expr.length -1 ] += input
+        }
+    }
+    console.log(expr)
+}
+
 function inputDigit( input ) { // 0,1,2,3,4,5,6,7,8,9
-    if( exprLen() % 2 === 0 ) {
-        expression.push(input)
+    if( expr.length % 2 === 0 ) {
+        expr.push(input)
     } else if( isResult === true ) {
-        expression[0] = input
+        expr[0] = input
         isResult = false
     } else {
-        let temp = expression[ exprLen()-1 ] + input
+        let temp = expr[ expr.length-1 ] + input
         if( minValue <= temp && temp <= maxValue ) {
-            expression[ exprLen()-1 ] = temp
+            expr[ expr.length-1 ] = temp
         }
     }
 }
 
 function inputBackspace( input ) {
-    if( exprLen() > 0 ) {
-        let last = expression.pop()
+    if( expr.length > 0 ) {
+        let last = expr.pop()
         if( last.length > 1 ) {
-            expression.push(last.slice(0, -1))
+            expr.push(last.slice(0, -1))
         }        
     }
 }
 
 function inputSign( input ) { //   +/-
-    if( exprLen() % 2 !== 0 ) {
-        let number = +expression[ exprLen() - 1 ]  
-        expression[ exprLen() - 1 ] = (number * (-1)).toString()
+    if( expr.length % 2 !== 0 ) {
+        let number = +expr[ expr.length - 1 ]  
+        expr[ expr.length - 1 ] = (number * (-1)).toString()
     }
 }
 
 function inputDot( input ) {
-    if( exprLen() % 2 === 0 ) {
-        expression.push( input )            
+    if( expr.length % 2 === 0 ) {
+        expr.push( input )            
     } else {
-        if( !expression[ exprLen() - 1 ].includes('.') ) {
-            expression[ exprLen() - 1 ] += '.'
+        if( !expr[ expr.length - 1 ].includes('.') ) {
+            expr[ expr.length - 1 ] += '.'
         }
     }
 }
 
 function inputOperation( input ) { //+,-,*,/
     isResult = false
-    if( exprLen() > 0 && exprLen() % 2 === 0 ) {
-        expression[ exprLen() - 1 ] = input 
+    if( expr.length > 0 && expr.length % 2 === 0 ) {
+        expr[ expr.length - 1 ] = input 
     } 
-    else if( exprLen() > 0 ) {
-        expression.push( input )
+    else if( expr.length > 0 ) {
+        expr.push( input )
     } 
 }
 
 function inputEnter( input ) {
-    if( exprLen() > 1 && exprLen() % 2 !== 0 ) {
-        expression[0] = calcExpression().toString()
-        expression.splice(1)
+    if( expr.length > 1 && expr.length % 2 !== 0 ) {
+        expr[0] = calcExpression().toString()
+        expr.splice(1)
         isResult = true
     }
 }
 
-function calcExpression() {
-    let result = expression[0]
-    for( let i = 2; i < exprLen(); i += 2 ) {
-        result = operate( +result, +expression[i], expression[i-1])
+function calcExpression( expr ) {
+    let result = 0;
+    if( expr[ 0 ].includes( '%' ) ) {
+        result = +(expr[ 0 ].slice(0, -1)) / 100        
+    } else {
+        result = expr[0]
+    }
+    for( let i = 2; i < expr.length; i += 2 ) {
+        if( expr[ i ].includes( '%' ) ) {
+            result = operate( +result, +expr[i], expr[i-1], '%' )                        
+        } else {
+            result = operate( +result, +expr[i], expr[i-1] )
+        }
     }
     return Number(Math.round(result + 'e7') + "e-7")
 }
 
+// function calcExpression() {
+//     let result = expr[0]
+//     for( let i = 2; i < expr.length; i += 2 ) {
+//         result = operate( +result, +expr[i], expr[i-1])
+//     }
+//     return Number(Math.round(result + 'e7') + "e-7")
+// }
+
 function render() {
-    let exprStr = expression.join('')
+    let exprStr = expr.join('')
     displayLiveEl.style.fontSize = calcDisplayLiveFontSize( exprStr )
 
     if( exprStr.length === 0 ) {
@@ -120,7 +146,7 @@ function render() {
         displayLiveEl.textContent = addCommasToExpr()
     }
 
-    if( exprLen() >= 3 ) {
+    if( expr.length >= 3 ) {
         let result = calcExpression()
         if( isNaN(result) ) {
             displayResultEl.textContent = 'NaN'
@@ -136,9 +162,9 @@ function render() {
     }
 }
 
-//Formats numbers of the expression with commas
+//Formats numbers of the expr with commas
 function addCommasToExpr() {
-    let tempExpr = expression.map((x) => x)
+    let tempExpr = expr.map((x) => x)
     for( let i = 0; i < tempExpr.length; i += 2 ) {
         tempExpr[i] = (+tempExpr[i]).toLocaleString()
     }
