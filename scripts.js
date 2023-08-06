@@ -49,7 +49,6 @@ function inputPercentage( input ) {
             expr[ expr.length -1 ] += input
         }
     }
-    console.log(expr)
 }
 
 function inputDigit( input ) { // 0,1,2,3,4,5,6,7,8,9
@@ -219,5 +218,3 @@ function operate( num1, num2, operation, op ) {
         case '%': return percentage( num1, num2, op)
     }
 }
-
-

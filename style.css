@@ -27,7 +27,7 @@ body {
     padding-right: 3px;
     height: 70px;
     white-space: nowrap;
-    overflow-x: scroll;
+    /* overflow-x: scroll; */
     overflow-y: hidden;
 }
 
